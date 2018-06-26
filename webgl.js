@@ -46,10 +46,23 @@ const init = () => {
     0.01,
     1000
   );
-  camera.position.z = 1;
+  camera.position.z = 30;
+  camera.position.y = 10;
 
   scene = new THREE.Scene();
 
+  //Grid
+  const grid = new THREE.GridHelper(50, 10, "rgb(47,48,49)", "rgb(57,58,59)");
+  scene.add(grid);
+
+  let geometry = new THREE.CylinderGeometry(0.05, 0.05, 20, 32),
+    material = new THREE.MeshBasicMaterial({ color: "rgb(47,48,49)" }),
+    yline = new THREE.Mesh(geometry, material);
+  yline.position.set(0, 10, 0);
+
+  scene.add(yline);
+
+  //Data
   for (let i = 0; i < path.length; i++) {
     let [x, y, z] = path[i],
       c = createCube(x, y, z);
@@ -66,6 +79,7 @@ const init = () => {
 
   //Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setClearColor("rgb(27,28,29)");
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   //Camera
