@@ -1,7 +1,21 @@
 import * as THREE from "three";
+import OrbitControls from "three-orbitcontrols";
 import image from "./texture.jpg";
 
-let camera, scene, renderer, geometry, material, mesh;
+let camera, scene, renderer, controls;
+
+// load a texture, set wrap mode to repeat
+var texture = new THREE.TextureLoader().load(image);
+texture.wrapS = THREE.RepeatWrapping;
+texture.wrapT = THREE.RepeatWrapping;
+
+const createCube = (x, y, z) => {
+  let geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1),
+    material = new THREE.MeshBasicMaterial({ map: texture }),
+    mesh = new THREE.Mesh(geometry, material);
+  mesh.position.set(x, y, z);
+  return mesh;
+};
 
 const init = () => {
   camera = new THREE.PerspectiveCamera(
@@ -14,18 +28,8 @@ const init = () => {
 
   scene = new THREE.Scene();
 
-  // load a texture, set wrap mode to repeat
-  var texture = new THREE.TextureLoader().load(image);
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-
-  console.log(texture);
-
-  geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-  material = new THREE.MeshPhongMaterial({ map: texture });
-
-  mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
+  let c = createCube(0, 0, 0);
+  scene.add(c);
 
   //Light
   var light = new THREE.AmbientLight(0x404040); // soft white light
@@ -35,17 +39,19 @@ const init = () => {
   var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
   scene.add(directionalLight);
 
+  //Renderer
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
+
+  //Camera
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.target = new THREE.Vector3(0, 0, 0);
+
   document.body.appendChild(renderer.domElement);
 };
 
 const animate = () => {
   requestAnimationFrame(animate);
-
-  mesh.rotation.x += 0.01;
-  mesh.rotation.y += 0.01;
-
   renderer.render(scene, camera);
 };
 
