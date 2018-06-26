@@ -2,7 +2,29 @@ import * as THREE from "three";
 import OrbitControls from "three-orbitcontrols";
 import image from "./texture.jpg";
 
-let camera, scene, renderer, controls;
+let camera,
+  scene,
+  renderer,
+  controls,
+  path = [
+    [0, 20, 0],
+    [0, 15, 0],
+    [0, 14, 1],
+    [0, 13, 2],
+    [0, 12, 3],
+    [0, 11, 4],
+    [5, 10, 5],
+    [6, 9, 4],
+    [7, 8, 3],
+    [7, 7, 2],
+    [6, 6, 1],
+    [5, 5, 0],
+    [4, 4, 0],
+    [3, 3, 0],
+    [2, 2, 0],
+    [1, 1, 0],
+    [0, 0, 0]
+  ];
 
 // load a texture, set wrap mode to repeat
 var texture = new THREE.TextureLoader().load(image);
@@ -10,7 +32,7 @@ texture.wrapS = THREE.RepeatWrapping;
 texture.wrapT = THREE.RepeatWrapping;
 
 const createCube = (x, y, z) => {
-  let geometry = new THREE.BoxGeometry(0.1, 0.1, 0.1),
+  let geometry = new THREE.BoxGeometry(1, 1, 1),
     material = new THREE.MeshBasicMaterial({ map: texture }),
     mesh = new THREE.Mesh(geometry, material);
   mesh.position.set(x, y, z);
@@ -22,14 +44,17 @@ const init = () => {
     70,
     window.innerWidth / window.innerHeight,
     0.01,
-    10
+    1000
   );
   camera.position.z = 1;
 
   scene = new THREE.Scene();
 
-  let c = createCube(0, 0, 0);
-  scene.add(c);
+  for (let i = 0; i < path.length; i++) {
+    let [x, y, z] = path[i],
+      c = createCube(x, y, z);
+    scene.add(c);
+  }
 
   //Light
   var light = new THREE.AmbientLight(0x404040); // soft white light
