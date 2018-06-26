@@ -13,12 +13,6 @@ const init = () => {
 
   scene = new THREE.Scene();
 
-  geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-
-  mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
-
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
@@ -26,9 +20,6 @@ const init = () => {
 
 const animate = () => {
   requestAnimationFrame(animate);
-
-  mesh.rotation.x += 0.01;
-  mesh.rotation.y += 0.01;
 
   renderer.render(scene, camera);
 };
