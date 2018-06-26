@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import image from "./texture.jpg";
 
 let camera, scene, renderer, geometry, material, mesh;
 
@@ -13,9 +14,15 @@ const init = () => {
 
   scene = new THREE.Scene();
 
-  geometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-  // material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-  material = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+  // load a texture, set wrap mode to repeat
+  var texture = new THREE.TextureLoader().load(image);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+
+  console.log(texture);
+
+  geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+  material = new THREE.MeshPhongMaterial({ map: texture });
 
   mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
